@@ -41,7 +41,6 @@ jobs:
       id: check 
       run: |
         echo $ACCOUNT_ID
-        env.ACCOUNT_ID
         echo ${{ env.ACCOUNT_ID }}
         aws s3api head-object --bucket do-not-delete-awsgoat-state-files-${{ env.ACCOUNT_ID }} --key terraform.tfstate
       continue-on-error: true
