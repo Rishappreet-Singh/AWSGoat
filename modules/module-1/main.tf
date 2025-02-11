@@ -3230,6 +3230,8 @@ resource "aws_s3_bucket_acl" "bucket_upload" {
 resource "aws_s3_bucket_policy" "allow_access_for_prod" {
   bucket = aws_s3_bucket.bucket_upload.id
   policy = data.aws_iam_policy_document.allow_get_access.json
+
+  depends_on = [ aws_s3_bucket_acl.bucket_upload ]
 }
 data "aws_iam_policy_document" "allow_get_access" {
   statement {
@@ -3259,6 +3261,7 @@ resource "aws_s3_bucket_cors_configuration" "bucket_upload" {
     allowed_methods = ["GET", "POST", "PUT"]
     allowed_origins = ["*"]
   }
+  depends_on = [aws_s3_bucket_acl.bucket_upload]
 }
 # Upload in production bucket
 
@@ -3314,6 +3317,8 @@ resource "aws_s3_bucket_acl" "dev" {
 resource "aws_s3_bucket_policy" "allow_access_for_dev" {
   bucket = aws_s3_bucket.dev.bucket
   policy = data.aws_iam_policy_document.allow_get_list_access.json
+
+  depends_on = [ aws_s3_bucket_acl.dev ]
 }
 data "aws_iam_policy_document" "allow_get_list_access" {
   statement {
