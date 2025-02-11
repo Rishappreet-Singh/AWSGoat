@@ -3269,7 +3269,7 @@ resource "aws_s3_object" "upload_folder_prod" {
   acl          = "public-read"
   source       = "./resources/s3/webfiles/${each.value}"
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
-  depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_api_gw]
+  depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_api_gw, aws_s3_bucket_acl.bucket_upload]
 }
 
 
@@ -3337,7 +3337,7 @@ resource "aws_s3_object" "upload_folder_dev" {
   acl          = "public-read"
   source       = "./resources/s3/webfiles/build/${each.value}"
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
-  depends_on   = [aws_s3_bucket.dev, null_resource.file_replacement_ec2_ip]
+  depends_on   = [aws_s3_bucket.dev, null_resource.file_replacement_ec2_ip, aws_s3_bucket_acl.dev]
 }
 
 resource "aws_s3_object" "upload_folder_dev_2" {
@@ -3347,7 +3347,7 @@ resource "aws_s3_object" "upload_folder_dev_2" {
   acl          = "public-read"
   source       = "./resources/s3/shared/${each.value}"
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
-  depends_on   = [aws_s3_bucket.dev, null_resource.file_replacement_ec2_ip]
+  depends_on   = [aws_s3_bucket.dev, null_resource.file_replacement_ec2_ip, aws_s3_bucket_acl.dev]
 }
 
 
@@ -3398,7 +3398,7 @@ resource "aws_s3_object" "upload_temp_object" {
   key          = each.value
   source       = "./resources/s3/webfiles/build/${each.value}"
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
-  depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_lambda_react]
+  depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_lambda_react, aws_s3_bucket_acl.bucket_temp]
 }
 
 resource "aws_s3_object" "upload_temp_object_2" {
@@ -3408,7 +3408,7 @@ resource "aws_s3_object" "upload_temp_object_2" {
   key          = each.value
   source       = "./resources/s3/shared/${each.value}"
   content_type = lookup(local.content_type_map, regex("\\.(?P<extension>[A-Za-z0-9]+)$", each.value).extension, "application/octet-stream")
-  depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_lambda_react]
+  depends_on   = [aws_s3_bucket.bucket_upload, null_resource.file_replacement_lambda_react, aws_s3_bucket_acl.bucket_temp]
 }
 /* Creating a S3 Bucket for Terraform state file upload. */
 resource "aws_s3_bucket" "bucket_tf_files" {
